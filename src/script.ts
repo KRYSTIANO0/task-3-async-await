@@ -1,15 +1,17 @@
-let error = "";
 let isLoading = false;
+let error: unknown;
 
-const companyDiv = document.getElementById("company-list");
+const companyDiv = document.getElementById("company-list")!;
 
 // get companies
 const getCompanies = async () => {
   let url = `http://localhost:3000/companies`;
   let companyList = "";
+  let companies: { name: string; uri: string }[];
+
   try {
     const response = await fetch(url);
-    const companies = await response.json();
+    companies = await response.json();
     companies.map((companie) => {
       companyList += `<li class="companie">
         <h2>${companie.name}</h2><ul class='users' id="${companie.uri}"></ul></li>`;
@@ -23,12 +25,19 @@ const getCompanies = async () => {
 //get users
 const getUsers = async () => {
   let url = "http://localhost:3000/users";
+  let users: {
+    name: string;
+    uri: string;
+    email: string;
+    uris: { company: string };
+  }[];
+
   try {
     const response = await fetch(url);
-    const users = await response.json();
+    users = await response.json();
     //send users to their company
     users.map((user) => {
-      const companyUsersDiv = document.getElementById(user.uris.company);
+      const companyUsersDiv = document.getElementById(user.uris.company)!;
       const li = document.createElement("li");
       li.appendChild(document.createTextNode(`${user.name}`));
       companyUsersDiv.appendChild(li);
@@ -42,4 +51,9 @@ const initialFunction = () => {
   getCompanies().then(getUsers);
 };
 
-window.onload = initialFunction();
+//initial state
+document.onreadystatechange = () => {
+  if (document.readyState === "complete") {
+    initialFunction();
+  }
+};
