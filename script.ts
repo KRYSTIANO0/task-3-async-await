@@ -4,7 +4,7 @@ let error: unknown;
 const companyDiv = document.getElementById("company-list")!;
 
 // get companies
-const getCompanies = async () => {
+const getCompanies = async (): Promise<void> => {
   let url = `http://localhost:3000/companies`;
   let companyList = "";
   let companies: { name: string; uri: string }[];
@@ -23,7 +23,7 @@ const getCompanies = async () => {
 };
 
 //get users
-const getUsers = async () => {
+const getUsers = async (): Promise<void> => {
   let url = "http://localhost:3000/users";
   let users: {
     name: string;
@@ -47,12 +47,12 @@ const getUsers = async () => {
   }
 };
 //initial function
-const initialFunction = () => {
+const initialFunction = (): void => {
   getCompanies().then(getUsers);
 };
 
 //initial state
-document.onreadystatechange = () => {
+document.onreadystatechange = (): void => {
   if (document.readyState === "complete") {
     initialFunction();
   }
